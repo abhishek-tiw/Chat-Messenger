@@ -1,0 +1,94 @@
+<!doctype html>
+<html ng-app="socketApp">
+
+<head>
+    <title>Shek Chat</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io();
+        socket.on('hi', function(msg) {
+            angular.element(document.getElementById('wrap')).scope().print(msg);
+            angular.element(document.getElementById('wrap')).scope().$apply();
+        });
+
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+    <script src="js/app.js"></script>
+</head>
+
+<body ng-controller="mainController">
+
+    <div class="container container-table" ng-show="!loggedIn">
+        <div class="row vertical-center-row">
+            <form class="form-inline">
+                <div class="form-group">
+                    <label for="exampleInputName2">Name</label>
+                    <input type="text" class="form-control" id="exampleInputName2" placeholder="Please enter your name" ng-model="name">
+                </div>
+                <button type="submit" class="btn btn-primary" ng-click="login(name)">Add me</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="wrap" class="container" ng-show="loggedIn">
+        <div class="col-md-12 col-lg-6">
+            <div class="panel">
+                <!--Heading-->
+                <div class="panel-heading">
+                    <h3 class="panel-title">Shek Messenger</h3>
+                </div>
+
+                <!--Widget body-->
+                <div id="demo-chat-body" class="collapse in">
+                    <div class="nano has-scrollbar" style="height:380px">
+                        <div class="nano-content pad-all" tabindex="0" style="right: -17px;">
+                            <ul class="list-unstyled media-block" ng-repeat="msg in message | reverse">
+
+                                <li class="mar-btm">
+                                    <div class="media-left">
+                                        <img src="http://projectpengyou.org/wp-content/plugins/buddypress/bp-core/images/mystery-man.jpg" class="img-circle img-sm" alt="Profile Picture">
+                                    </div>
+                                    <div class="media-body pad-hor">
+                                        <div class="speech">
+                                            <a href="#" class="media-heading">{{msg.name}}</a>
+                                            <p>{{msg.body}}</p>
+                                            <p class="speech-time">
+                                                <i class="fa fa-clock-o fa-fw"></i>09:23AM
+                                            </p>
+                                        </div>
+                                    </div>
+                                </li>
+
+                            </ul>
+                        </div>
+
+                        <div class="nano-pane">
+                            <div class="nano-slider" style="height: 141px; transform: translate(0px, 0px);"></div>
+                        </div>
+                    </div>
+
+                    <!--Widget footer-->
+                    <div class="panel-footer">
+                        <div class="row">
+                            <div class="col-xs-9">
+                                <input type="text" placeholder="Enter your text" class="form-control chat-input" ng-model="myText">
+                            </div>
+                            <div class="col-xs-3">
+                                <button class="btn btn-primary btn-block" type="submit" ng-click="emit()">Send</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
